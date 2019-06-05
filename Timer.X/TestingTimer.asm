@@ -12,19 +12,19 @@ Start:
     CLRF PORTA
     CLRF LATA
 HERE:
-    MOVLW 0x05
+    MOVLW 0x05; setting the prescalar to 64
     MOVWF T0CON
-    MOVLW 0xF8
+    MOVLW 0xF8; Loading hex F8 to the high registers
     MOVWF TMR0H
-    MOVLW 0x08
+    MOVLW 0x08; Loading 08 to the Low registers
     MOVWF TMR0L
-    BCF INTCON, TMR0IF
-    BTG PORTA, RA7
-    BSF T0CON, TMR0ON
+    BCF INTCON, TMR0IF; Clearing the timer flag
+    BTG PORTA, RA7; Toggle the LED
+    BSF T0CON, TMR0ON; Start the timer
 AGAIN:
-    BTFSS INTCON, TMR0IF
+    BTFSS INTCON, TMR0IF; When the timer flag is raised skip next instruction
     BRA AGAIN
-    BCF T0CON, TMR0ON
+    BCF T0CON, TMR0ON; Reset the timers
     BRA HERE
 end
     
