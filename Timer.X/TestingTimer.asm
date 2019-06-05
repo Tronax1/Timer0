@@ -10,8 +10,11 @@ org 0; start code at 0
 Start:
     CLRF TRISA
     CLRF PORTA
+    CLRF PORTB
     CLRF LATA
-HERE:
+main:
+    BTFSS PORTB, RB4
+    GOTO Faster
     MOVLW 0x05; setting the prescalar to 64
     MOVWF T0CON
     MOVLW 0xF8; Loading hex F8 to the high registers
@@ -25,7 +28,18 @@ AGAIN:
     BTFSS INTCON, TMR0IF; When the timer flag is raised skip next instruction
     BRA AGAIN
     BCF T0CON, TMR0ON; Reset the timers
-    BRA HERE
+    BRA main
+Faster:
+    MOVLW 0x05; setting the prescalar to 64
+    MOVWF T0CON
+    MOVLW 0xFF; Loading hex F8 to the high registers
+    MOVWF TMR0H
+    MOVLW 0x08; Loading 08 to the Low registers
+    MOVWF TMR0L
+    BCF INTCON, TMR0IF; Clearing the timer flag
+    BTG PORTA, RA7; Toggle the LED
+    BSF T0CON, TMR0ON; Start the timer
+    GOTO AGAIN
 end
     
 

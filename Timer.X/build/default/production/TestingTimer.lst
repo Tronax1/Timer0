@@ -1,4 +1,4 @@
-MPASM 5.84                  TESTINGTIMER.ASM   6-5-2019  11:53:14         PAGE  1
+MPASM 5.84                  TESTINGTIMER.ASM   6-5-2019  14:58:22         PAGE  1
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -33,25 +33,45 @@ Warning[205]: Found directive in column 1. (org)
 000000                00010 Start:
 000000 6A92           00011     CLRF TRISA
 000002 6A80           00012     CLRF PORTA
-000004 6A89           00013     CLRF LATA
-000006                00014 HERE:
-000006 0E05           00015     MOVLW 0x05
-000008 6ED5           00016     MOVWF T0CON
-00000A 0EF8           00017     MOVLW 0xF8
-00000C 6ED7           00018     MOVWF TMR0H
-00000E 0E08           00019     MOVLW 0x08
-000010 6ED6           00020     MOVWF TMR0L
-000012 94F2           00021     BCF INTCON, TMR0IF
-000014 7E80           00022     BTG PORTA, RA7
-000016 8ED5           00023     BSF T0CON, TMR0ON
-000018                00024 AGAIN:
-000018 A4F2           00025     BTFSS INTCON, TMR0IF
-00001A D???           00026     BRA AGAIN
-00001C 9ED5           00027     BCF T0CON, TMR0ON
-00001E D???           00028     BRA HERE
+000004 6A81           00013     CLRF PORTB
+000006 6A89           00014     CLRF LATA
+000008                00015 main:
+000008 A881           00016     BTFSS PORTB, RB4
+00000A EF?? F???      00017     GOTO Faster
+00000E 0E05           00018     MOVLW 0x05; setting the prescalar to 64
+000010 6ED5           00019     MOVWF T0CON
+000012 0EF8           00020     MOVLW 0xF8; Loading hex F8 to the high registers
+000014 6ED7           00021     MOVWF TMR0H
+000016 0E08           00022     MOVLW 0x08; Loading 08 to the Low registers
+000018 6ED6           00023     MOVWF TMR0L
+00001A 94F2           00024     BCF INTCON, TMR0IF; Clearing the timer flag
+00001C 7E80           00025     BTG PORTA, RA7; Toggle the LED
+00001E 8ED5           00026     BSF T0CON, TMR0ON; Start the timer
+000020                00027 AGAIN:
+000020 A4F2           00028     BTFSS INTCON, TMR0IF; When the timer flag is raised skip next instruction
+000022 D???           00029     BRA AGAIN
+000024 9ED5           00030     BCF T0CON, TMR0ON; Reset the timers
+000026 D???           00031     BRA main
+000028                00032 Faster:
+000028 0E05           00033     MOVLW 0x05; setting the prescalar to 64
+00002A 6ED5           00034     MOVWF T0CON
+00002C 0EFF           00035     MOVLW 0xFF; Loading hex F8 to the high registers
+00002E 6ED7           00036     MOVWF TMR0H
+MPASM 5.84                  TESTINGTIMER.ASM   6-5-2019  14:58:22         PAGE  2
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+000030 0E08           00037     MOVLW 0x08; Loading 08 to the Low registers
+000032 6ED6           00038     MOVWF TMR0L
+000034 94F2           00039     BCF INTCON, TMR0IF; Clearing the timer flag
+000036 7E80           00040     BTG PORTA, RA7; Toggle the LED
+000038 8ED5           00041     BSF T0CON, TMR0ON; Start the timer
+00003A EF?? F???      00042     GOTO AGAIN
 Warning[205]: Found directive in column 1. (end)
-                      00029 end
-MPASM 5.84                  TESTINGTIMER.ASM   6-5-2019  11:53:14         PAGE  2
+                      00043 end
+MPASM 5.84                  TESTINGTIMER.ASM   6-5-2019  14:58:22         PAGE  3
 
 
 SYMBOL TABLE
@@ -106,11 +126,11 @@ ADIP                              00000006
 ADON                              00000000
 ADRESH                            00000FC4
 ADRESL                            00000FC3
-AGAIN                             00000018
+AGAIN                             00000020
 AHEN                              00000001
 AN0                               00000000
 AN1                               00000001
-MPASM 5.84                  TESTINGTIMER.ASM   6-5-2019  11:53:14         PAGE  3
+MPASM 5.84                  TESTINGTIMER.ASM   6-5-2019  14:58:22         PAGE  4
 
 
 SYMBOL TABLE
@@ -169,7 +189,7 @@ BRG11                             00000003
 BRG12                             00000004
 BRG13                             00000005
 BRG14                             00000006
-MPASM 5.84                  TESTINGTIMER.ASM   6-5-2019  11:53:14         PAGE  4
+MPASM 5.84                  TESTINGTIMER.ASM   6-5-2019  14:58:22         PAGE  5
 
 
 SYMBOL TABLE
@@ -228,7 +248,7 @@ CCP1                              00000002
 CCP1ASE                           00000007
 CCP1CON                           00000FBD
 CCP1IE                            00000002
-MPASM 5.84                  TESTINGTIMER.ASM   6-5-2019  11:53:14         PAGE  5
+MPASM 5.84                  TESTINGTIMER.ASM   6-5-2019  14:58:22         PAGE  6
 
 
 SYMBOL TABLE
@@ -287,7 +307,7 @@ CPOL                              00000004
 CRC16EE                           00000002
 CRC16EF                           00000002
 CRC5EE                            00000001
-MPASM 5.84                  TESTINGTIMER.ASM   6-5-2019  11:53:14         PAGE  6
+MPASM 5.84                  TESTINGTIMER.ASM   6-5-2019  14:58:22         PAGE  7
 
 
 SYMBOL TABLE
@@ -346,7 +366,7 @@ ECCP1CON                          00000FBD
 ECCP1DEL                          00000FB7
 ECCP2CON                          00000F97
 EDG1POL                           00000004
-MPASM 5.84                  TESTINGTIMER.ASM   6-5-2019  11:53:14         PAGE  7
+MPASM 5.84                  TESTINGTIMER.ASM   6-5-2019  14:58:22         PAGE  8
 
 
 SYMBOL TABLE
@@ -405,7 +425,7 @@ FSR2H                             00000FDA
 FSR2L                             00000FD9
 FVREN                             00000007
 FVRS0                             00000004
-MPASM 5.84                  TESTINGTIMER.ASM   6-5-2019  11:53:14         PAGE  8
+MPASM 5.84                  TESTINGTIMER.ASM   6-5-2019  14:58:22         PAGE  9
 
 
 SYMBOL TABLE
@@ -413,6 +433,7 @@ SYMBOL TABLE
 
 FVRS1                             00000005
 FVRST                             00000006
+Faster                            00000028
 GCEN                              00000007
 GIE                               00000007
 GIEH                              00000007
@@ -420,7 +441,6 @@ GIEL                              00000006
 GIE_GIEH                          00000007
 GO                                00000001
 GO_NOT_DONE                       00000001
-HERE                              00000006
 HFIOFR                            00000001
 HFIOFS                            00000002
 HLVDCON                           00000F9C
@@ -464,7 +484,7 @@ INTCON2                           00000FF1
 INTCON3                           00000FF0
 INTEDG0                           00000006
 INTEDG1                           00000005
-MPASM 5.84                  TESTINGTIMER.ASM   6-5-2019  11:53:14         PAGE  9
+MPASM 5.84                  TESTINGTIMER.ASM   6-5-2019  14:58:22         PAGE 10
 
 
 SYMBOL TABLE
@@ -523,7 +543,7 @@ LATB5                             00000005
 LATB6                             00000006
 LATB7                             00000007
 LATC                              00000F8B
-MPASM 5.84                  TESTINGTIMER.ASM   6-5-2019  11:53:14         PAGE 10
+MPASM 5.84                  TESTINGTIMER.ASM   6-5-2019  14:58:22         PAGE 11
 
 
 SYMBOL TABLE
@@ -582,7 +602,7 @@ OSCFIE                            00000007
 OSCFIF                            00000007
 OSCFIP                            00000007
 OSCTUNE                           00000F9B
-MPASM 5.84                  TESTINGTIMER.ASM   6-5-2019  11:53:14         PAGE 11
+MPASM 5.84                  TESTINGTIMER.ASM   6-5-2019  14:58:22         PAGE 12
 
 
 SYMBOL TABLE
@@ -641,7 +661,7 @@ POSTDEC1                          00000FE5
 POSTDEC2                          00000FDD
 POSTINC0                          00000FEE
 POSTINC1                          00000FE6
-MPASM 5.84                  TESTINGTIMER.ASM   6-5-2019  11:53:14         PAGE 12
+MPASM 5.84                  TESTINGTIMER.ASM   6-5-2019  14:58:22         PAGE 13
 
 
 SYMBOL TABLE
@@ -700,7 +720,7 @@ RC2                               00000002
 RC4                               00000004
 RC5                               00000005
 RC6                               00000006
-MPASM 5.84                  TESTINGTIMER.ASM   6-5-2019  11:53:14         PAGE 13
+MPASM 5.84                  TESTINGTIMER.ASM   6-5-2019  14:58:22         PAGE 14
 
 
 SYMBOL TABLE
@@ -759,7 +779,7 @@ SLRCON                            00000F7A
 SLRD                              00000003
 SLRE                              00000004
 SMP                               00000007
-MPASM 5.84                  TESTINGTIMER.ASM   6-5-2019  11:53:14         PAGE 14
+MPASM 5.84                  TESTINGTIMER.ASM   6-5-2019  14:58:22         PAGE 15
 
 
 SYMBOL TABLE
@@ -818,7 +838,7 @@ SSP1ADD5                          00000005
 SSP1ADD6                          00000006
 SSP1ADD7                          00000007
 SSP1BUF                           00000FC9
-MPASM 5.84                  TESTINGTIMER.ASM   6-5-2019  11:53:14         PAGE 15
+MPASM 5.84                  TESTINGTIMER.ASM   6-5-2019  14:58:22         PAGE 16
 
 
 SYMBOL TABLE
@@ -877,7 +897,7 @@ STR1A                             00000000
 STR1B                             00000001
 STR1C                             00000002
 STR1D                             00000003
-MPASM 5.84                  TESTINGTIMER.ASM   6-5-2019  11:53:14         PAGE 16
+MPASM 5.84                  TESTINGTIMER.ASM   6-5-2019  14:58:22         PAGE 17
 
 
 SYMBOL TABLE
@@ -936,7 +956,7 @@ T2OUTPS1                          00000004
 T2OUTPS2                          00000005
 T2OUTPS3                          00000006
 T3CKPS0                           00000004
-MPASM 5.84                  TESTINGTIMER.ASM   6-5-2019  11:53:14         PAGE 17
+MPASM 5.84                  TESTINGTIMER.ASM   6-5-2019  14:58:22         PAGE 18
 
 
 SYMBOL TABLE
@@ -995,7 +1015,7 @@ TMR2ON                            00000002
 TMR3                              00000FB2
 TMR3CS0                           00000006
 TMR3CS1                           00000007
-MPASM 5.84                  TESTINGTIMER.ASM   6-5-2019  11:53:14         PAGE 18
+MPASM 5.84                  TESTINGTIMER.ASM   6-5-2019  14:58:22         PAGE 19
 
 
 SYMBOL TABLE
@@ -1054,7 +1074,7 @@ TRISD4                            00000004
 TRISD5                            00000005
 TRISD6                            00000006
 TRISD7                            00000007
-MPASM 5.84                  TESTINGTIMER.ASM   6-5-2019  11:53:14         PAGE 19
+MPASM 5.84                  TESTINGTIMER.ASM   6-5-2019  14:58:22         PAGE 20
 
 
 SYMBOL TABLE
@@ -1113,7 +1133,7 @@ UEP4                              00000F6E
 UEP5                              00000F6F
 UEP6                              00000F70
 UEP7                              00000F71
-MPASM 5.84                  TESTINGTIMER.ASM   6-5-2019  11:53:14         PAGE 20
+MPASM 5.84                  TESTINGTIMER.ASM   6-5-2019  14:58:22         PAGE 21
 
 
 SYMBOL TABLE
@@ -1172,7 +1192,7 @@ _BOREN_ON_2L                      000000FB
 _BOREN_SBORDIS_2L                 000000FF
 _BORV_190_2L                      000000FF
 _BORV_220_2L                      000000F7
-MPASM 5.84                  TESTINGTIMER.ASM   6-5-2019  11:53:14         PAGE 21
+MPASM 5.84                  TESTINGTIMER.ASM   6-5-2019  14:58:22         PAGE 22
 
 
 SYMBOL TABLE
@@ -1231,7 +1251,7 @@ _FCMEN_ON_1H                      000000FF
 _FOSC_ECHCLKO_1H                  000000F4
 _FOSC_ECHIO_1H                    000000F5
 _FOSC_ECLCLKO_1H                  000000FC
-MPASM 5.84                  TESTINGTIMER.ASM   6-5-2019  11:53:14         PAGE 22
+MPASM 5.84                  TESTINGTIMER.ASM   6-5-2019  14:58:22         PAGE 23
 
 
 SYMBOL TABLE
@@ -1290,7 +1310,7 @@ _WDTPS_1_2H                       000000C3
 _WDTPS_2048_2H                    000000EF
 _WDTPS_256_2H                     000000E3
 _WDTPS_2_2H                       000000C7
-MPASM 5.84                  TESTINGTIMER.ASM   6-5-2019  11:53:14         PAGE 23
+MPASM 5.84                  TESTINGTIMER.ASM   6-5-2019  14:58:22         PAGE 24
 
 
 SYMBOL TABLE
@@ -1325,6 +1345,7 @@ _nLPBOR_OFF_2L                    000000FF
 _nLPBOR_ON_2L                     000000BF
 _nPWRTEN_OFF_2L                   000000FF
 _nPWRTEN_ON_2L                    000000FE
+main                              00000008
 
 Errors   :     0
 Warnings :     8 reported,     0 suppressed
